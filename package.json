@@ -1,0 +1,18 @@
+{
+  "name": "faraway-grenadier",
+  "version": "0.0.1",
+  "description": "Grenade throwing game",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx esbuild src/main.ts --sourcemap --outdir=src --bundle --watch --servedir=src"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.17.19",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "pixi.js": "^7.2.4"
+  }
+}
