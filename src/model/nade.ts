@@ -15,6 +15,7 @@ export class Nade implements HasPosition {
   type: NadeType
   initialPos: Position
   pos: Position
+  throwDistance = 0
   config: NadeConfig
   flightElapsed: ms
   isFlying = false
@@ -24,19 +25,20 @@ export class Nade implements HasPosition {
     this.config = Object.assign(NADE_CONFIG[type])
   }
 
-  startFlying(pos: Position) {
+  startFlying(pos: Position, throwDistance: number) {
     // ToDo: reuse points
     this.initialPos = { x: pos.x, y: pos.y }
     this.pos = { x: pos.x, y: pos.y }
     this.flightElapsed = 0
     this.isFlying = true
+    this.throwDistance = throwDistance
   }
 
   update(dt: ms) {
     if (this.isFlying) {
       this.flightElapsed += dt
 
-      const range = 7.5
+      const range = 7.5 * this.throwDistance
       const height = 300
 
       const t = Math.min(this.flightElapsed / this.config.flightDuration, 1)

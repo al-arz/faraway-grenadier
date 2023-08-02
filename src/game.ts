@@ -40,6 +40,9 @@ export class Game {
 
       this.app.ticker.add(() => {
         thrower.update(this.app.ticker.deltaMS)
+        for (const nade of this.activeNades.keys()) {
+          nade.update(this.app.ticker.deltaMS)
+        }
       })
     } else {
       console.warn("Location has no characters")
