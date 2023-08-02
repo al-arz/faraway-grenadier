@@ -1,4 +1,5 @@
-import { LocationObjectType } from "../configs/location_config"
+import { Character } from "./character"
+import { Obstacle } from "./obstacle"
 
 export type Position = { x: number, y: number }
 
@@ -6,21 +7,33 @@ export interface HasPosition {
   pos: Position
 }
 
-export interface LocationObject extends HasPosition {
-  type: LocationObjectType
-}
+export type LocationObject = Character | Obstacle
 
 export class GameLocation {
-  objects: LocationObject[]
+  objects: LocationObject[] = []
+  characters: Character[] = []
+  obstacles: Obstacle[] = []
+
   constructor() {
-    this.objects = []
   }
 
   addObject(obj: LocationObject) {
     this.objects.push(obj)
+    switch (obj.type) {
+      case "character":
+        this.characters.push(obj)
+        break
+      case "obstacle":
+        this.obstacles.push(obj)
+        break
+    }
   }
 
-  getFirstCharacter(): LocationObject | undefined {
-    return this.objects.find(o => o.type == "character")
+  getPlayableCharacter(): Character | undefined {
+    return this.characters[0]
+  }
+
+  getEnemy(): Character | undefined {
+    return this.characters[1]
   }
 }

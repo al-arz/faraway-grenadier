@@ -38,7 +38,7 @@ export class Nade implements HasPosition {
     if (this.isFlying) {
       this.flightElapsed += dt
 
-      const range = 7.5 * this.throwDistance
+      const range = 16 * this.throwDistance
       const height = 300
 
       const t = Math.min(this.flightElapsed / this.config.flightDuration, 1)

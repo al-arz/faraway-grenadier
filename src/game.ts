@@ -9,6 +9,7 @@ import { Nade, NadeType } from "./model/nade";
 import { Obstacle } from "./model/obstacle";
 import { NADE_COLORS, NadeUI } from "./nade_ui";
 import { PALETTE } from "./palette";
+import { StatBar } from "./ui/statbar";
 import { EventBus, quadFallof } from "./utils";
 
 export class Game {
@@ -30,12 +31,12 @@ export class Game {
     const location = this._createLocation(LOCATION_CONFIG)
     this._displayLocation(location)
 
-    const firstCharacter = location.getFirstCharacter()
-    if (firstCharacter) {
-      const thrower = new GrenadeThrower(firstCharacter)
+    const pc = location.getPlayableCharacter()
+    if (pc) {
+      const thrower = new GrenadeThrower(pc)
 
       EventBus.on(GAME_EVENTS.NADE_LAUNCHED, (n: Nade) => {
-        this._launchNade(firstCharacter, n)
+        this._launchNade(pc, n)
       })
 
       this.app.ticker.add(() => {
@@ -60,7 +61,7 @@ export class Game {
         this.app.stage.removeChild(s)
         this.activeNades.delete(nade)
       }
-      for (const target of location.objects) {
+      for (const target of location.characters) {
         const dx = target.pos.x - nade.pos.x
         const dy = target.pos.y - nade.pos.y
 
@@ -69,7 +70,8 @@ export class Game {
         console.log("dSq, blastRadiusSq", dSq, blastSq)
         if (dSq <= blastSq) {
           const falloff = quadFallof(2 * (dSq / blastSq), 2)
-          const dmg = nade.config.damage * falloff
+          const dmg = nade.config.damage * falloff;
+          target.takeDamage(dmg)
           console.log(`hit ${target.type} at ${target.pos.x}, ${target.pos.y} for ${dmg} damage`)
           console.log(`percent of range ${dSq / blastSq}, falloff ${falloff}`)
         }
@@ -87,10 +89,32 @@ export class Game {
 
     this.app.stage.addChild(nadeUI)
 
+    const enemy = location.getEnemy()
+    if (enemy) {
+      const enemyHPBar = new StatBar(100, 100)
+      this.app.stage.addChild(enemyHPBar)
+      enemyHPBar.update(enemy.hp)
+      enemyHPBar.position.set(enemy.pos.x, enemy.pos.y)
+
+      EventBus.on(GAME_EVENTS.CHARACTER_HIT, (character: Character, damage: number) => {
+        enemyHPBar.update(character.hp)
+      })
+
+      EventBus.on(GAME_EVENTS.CHARACTER_DIED, (character: Character) => {
+        this._gameOver()
+      })
+    }
+
+
     if (DEBUG) {
       this._setupDebugFeatures()
     }
   }
+
+  private _gameOver() {
+    alert("Game over")
+  }
+
   private _launchNade(thrower: LocationObject, nade: Nade) {
 
     const nadeSprite = new Sprite()

@@ -1,8 +1,7 @@
-import { LocationObjectType } from "../configs/location_config";
 import { HasPosition, Position } from "./game_location";
 
 export class Obstacle implements HasPosition {
-  type: LocationObjectType
+  type: "obstacle"
   pos: Position
 
   constructor(initialPosition: Position) {
