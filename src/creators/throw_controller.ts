@@ -1,3 +1,4 @@
+import { ms } from "../configs/nade_config";
 import { GAME_EVENTS } from "../events";
 import { HasPosition, Position } from "../model/game_location";
 import { Nade, NadeType } from "../model/nade";
@@ -7,6 +8,7 @@ export class GrenadeThrower {
   initialPosition: Position
   isThrowingAllowed = true
 
+  aimDuration: ms
   nade: Nade
 
   constructor(thrower: HasPosition) {
@@ -45,9 +47,9 @@ export class GrenadeThrower {
     nade.startFlying(this.initialPosition)
   }
 
-  update(ms: number) {
+  update(dt: ms) {
     if (this.nade) {
-      this.nade.update(ms)
+      this.nade.update(dt)
     }
   }
 }

@@ -1,4 +1,4 @@
-import { NADE_CONFIG, NadeConfig } from "../configs/nade_config"
+import { ms, NADE_CONFIG, NadeConfig } from "../configs/nade_config"
 import { GAME_EVENTS } from "../events"
 import { EventBus } from "../utils"
 import { HasPosition, Position } from "./game_location"
@@ -16,7 +16,7 @@ export class Nade implements HasPosition {
   initialPos: Position
   pos: Position
   config: NadeConfig
-  flightElapsedMS: number
+  flightElapsed: ms
   isFlying = false
 
   constructor(type: NadeType) {
@@ -28,23 +28,23 @@ export class Nade implements HasPosition {
     // ToDo: reuse points
     this.initialPos = { x: pos.x, y: pos.y }
     this.pos = { x: pos.x, y: pos.y }
-    this.flightElapsedMS = 0
+    this.flightElapsed = 0
     this.isFlying = true
   }
 
-  update(ms: number) {
+  update(dt: ms) {
     if (this.isFlying) {
-      this.flightElapsedMS += ms
+      this.flightElapsed += dt
 
       const range = 7.5
       const height = 300
 
-      const t = Math.min(this.flightElapsedMS / this.config.flightDurationMS, 1)
+      const t = Math.min(this.flightElapsed / this.config.flightDuration, 1)
       this.pos.x = (this.initialPos.x * (1 + t * range))
       this.pos.y = this.initialPos.y - Math.sin(t * Math.PI) * height
 
 
-      if (this.flightElapsedMS >= this.config.flightDurationMS) {
+      if (this.flightElapsed >= this.config.flightDuration) {
         this.isFlying = false
         this.explode()
       }
