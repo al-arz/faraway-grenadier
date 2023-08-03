@@ -7,7 +7,7 @@ export type NadeConfig = {
   damage: number
   maxRange: number
   aimDuration: ms
-  flightDuration: ms
+  flightDuration: ms,
 }
 
 export const NADE_CONFIG: Record<NadeType, NadeConfig> = {

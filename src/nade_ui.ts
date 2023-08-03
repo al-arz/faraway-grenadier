@@ -1,6 +1,6 @@
 import { ColorSource, Container, Graphics, Sprite } from "pixi.js";
 import { GAME_EVENTS } from "./events";
-import { NadeType } from "./model/nade";
+import { NADE_ICON_KEYS, NadeType } from "./model/nade";
 import { PALETTE } from "./palette";
 import { EventBus } from "./utils";
 
@@ -25,19 +25,25 @@ export class NadeUI extends Container {
     })
   }
 
-
   private _getNadeButton(n: NadeType): NadeButton {
-    // const textureKey = NADE_ICON_KEYS[n]
-    // const btn = Sprite.from(textureKey)
-
     const btn = new Sprite()
+
     const g = new Graphics()
-    g.beginFill(NADE_COLORS[n])
-    g.drawRoundedRect(0, 0, BTN_W, 40, 5)
+    g.beginFill(PALETTE.DARKGRAY)
+    g.drawRect(0, 0, BTN_W, 80)
     g.endFill()
+
+    const textureKey = NADE_ICON_KEYS[n]
+    const icon = Sprite.from(textureKey)
+    icon.anchor.set(0.5)
+    icon.scale.set(3)
+    icon.position.set(g.width / 2, g.height / 2)
+
     btn.addChild(g)
+    btn.addChild(icon)
     btn.eventMode = "static"
     let pressed = false
+
     btn.on("pointerdown", () => {
       console.log(`${n} grenade button pressed`)
       EventBus.emit(GAME_EVENTS.NADE_BUTTON_DOWN, n)

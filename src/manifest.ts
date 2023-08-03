@@ -5,7 +5,19 @@ export const manifest: ResolverManifest = {
     {
       name: "ground",
       assets: {
-        "asphalt": "./assets/ground/ground.json"
+        "tiles": "./assets/ground/ground.json"
+      }
+    },
+    {
+      name: "nades",
+      assets: {
+        "nades": "./assets/nades/nades.json"
+      }
+    },
+    {
+      name: "chars",
+      assets: {
+        "chars": "./assets/chars/chars.json"
       }
     },
   ]

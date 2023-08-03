@@ -5,16 +5,18 @@ import { HasPosition, WorldPos } from "./game_location"
 
 export type NadeType = "frag" | "he" | "thermal"
 
-export const NADE_ICON_KEYS: Record<NadeType, string> = {
+export type Pos3D = { x: number, y: number, z: number }
+
+export const NADE_ICON_KEYS = {
   frag: "frag",
   he: "he",
-  thermal: "thermal"
-}
+  thermal: "molotov"
+} as const
 
 export class Nade implements HasPosition {
   type: NadeType
-  initialPos: WorldPos
-  pos: WorldPos
+  initialPos: Pos3D
+  pos: Pos3D
   throwDistance = 0
   config: NadeConfig
   flightElapsed: ms
@@ -27,8 +29,8 @@ export class Nade implements HasPosition {
 
   startFlying(pos: WorldPos, throwDistance: number) {
     // ToDo: reuse points
-    this.initialPos = { x: pos.x, y: pos.y }
-    this.pos = { x: pos.x, y: pos.y }
+    this.initialPos = { x: pos.x, y: pos.y, z: 0 }
+    this.pos = { x: pos.x, y: pos.y, z: 0 }
     this.flightElapsed = 0
     this.isFlying = true
     this.throwDistance = throwDistance
@@ -43,7 +45,7 @@ export class Nade implements HasPosition {
 
       const t = Math.min(this.flightElapsed / this.config.flightDuration, 1)
       this.pos.x = (this.initialPos.x * (1 + t * range))
-      this.pos.y = this.initialPos.y - Math.sin(t * Math.PI) * height
+      this.pos.z = this.initialPos.z - Math.sin(t * Math.PI) * height
 
 
       if (this.flightElapsed >= this.config.flightDuration) {

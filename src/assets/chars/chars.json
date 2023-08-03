@@ -1,0 +1,96 @@
+{
+  "frames": {
+    "blue-1": {
+      "frame": { "x": 1, "y": 1, "w": 28, "h": 33 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 12, "y": 6, "w": 28, "h": 33 },
+      "sourceSize": { "w": 48, "h": 48 },
+      "pivot": { "x": 0.5, "y": 0.5 }
+    },
+    "blue-2": {
+      "frame": { "x": 1, "y": 36, "w": 28, "h": 33 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 12, "y": 6, "w": 28, "h": 33 },
+      "sourceSize": { "w": 48, "h": 48 },
+      "pivot": { "x": 0.5, "y": 0.5 }
+    },
+    "red-1": {
+      "frame": { "x": 1, "y": 71, "w": 28, "h": 33 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 12, "y": 6, "w": 28, "h": 33 },
+      "sourceSize": { "w": 48, "h": 48 },
+      "pivot": { "x": 0.5, "y": 0.5 }
+    },
+    "red-2": {
+      "frame": { "x": 1, "y": 106, "w": 28, "h": 33 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 12, "y": 6, "w": 28, "h": 33 },
+      "sourceSize": { "w": 48, "h": 48 },
+      "pivot": { "x": 0.5, "y": 0.5 }
+    },
+    "blue-0": {
+      "frame": { "x": 1, "y": 141, "w": 28, "h": 32 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 12, "y": 7, "w": 28, "h": 32 },
+      "sourceSize": { "w": 48, "h": 48 },
+      "pivot": { "x": 0.5, "y": 0.5 }
+    },
+    "blue-3": {
+      "frame": { "x": 1, "y": 175, "w": 28, "h": 32 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 12, "y": 7, "w": 28, "h": 32 },
+      "sourceSize": { "w": 48, "h": 48 },
+      "pivot": { "x": 0.5, "y": 0.5 }
+    },
+    "blue-4": {
+      "frame": { "x": 1, "y": 209, "w": 28, "h": 32 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 12, "y": 7, "w": 28, "h": 32 },
+      "sourceSize": { "w": 48, "h": 48 },
+      "pivot": { "x": 0.5, "y": 0.5 }
+    },
+    "red-0": {
+      "frame": { "x": 1, "y": 243, "w": 28, "h": 32 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 12, "y": 7, "w": 28, "h": 32 },
+      "sourceSize": { "w": 48, "h": 48 },
+      "pivot": { "x": 0.5, "y": 0.5 }
+    },
+    "red-3": {
+      "frame": { "x": 1, "y": 277, "w": 28, "h": 32 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 12, "y": 7, "w": 28, "h": 32 },
+      "sourceSize": { "w": 48, "h": 48 },
+      "pivot": { "x": 0.5, "y": 0.5 }
+    },
+    "red-4": {
+      "frame": { "x": 1, "y": 311, "w": 28, "h": 32 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 12, "y": 7, "w": 28, "h": 32 },
+      "sourceSize": { "w": 48, "h": 48 },
+      "pivot": { "x": 0.5, "y": 0.5 }
+    }
+  },
+  "animations": {
+    "red": ["red-0","red-1","red-2","red-3","red-4"],
+    "blue": ["blue-0","blue-1","blue-2","blue-3","blue-4"]
+  },
+  "meta": {
+    "app": "http://github.com/odrick/free-tex-packer-core",
+    "version": "0.3.4",
+    "image": "chars.png",
+    "format": "RGBA8888",
+    "size": { "w": 30, "h": 344 },
+    "scale": 1
+  }
+}

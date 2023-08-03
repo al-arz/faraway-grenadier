@@ -5,7 +5,7 @@ const path = require("path");
 const options = {
   textureName: "my-texture",
   fixedSize: false,
-  padding: 0,
+  padding: 1,
   allowRotation: false,
   detectIdentical: true,
   allowTrim: true,
@@ -17,6 +17,8 @@ const options = {
 const bundleSrcPath = "./assets_src/_pack/"
 const bundles = [
   "ground",
+  "nades",
+  // "chars",
 ]
 
 const outputPath = "./src/assets/"

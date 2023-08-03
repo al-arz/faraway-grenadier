@@ -2,7 +2,7 @@ import { Container, Sprite, Text } from "pixi.js";
 import { getDisplayPos } from "./utils";
 
 export const TILE_W = 128
-export const TILE_H = 256
+export const TILE_H = 128
 
 export class GroundLayer extends Container {
   constructor(w: number, h: number) {
@@ -17,7 +17,7 @@ export class GroundLayer extends Container {
         coordText.anchor.set(0.5)
         tile.addChild(coordText)
 
-        const pos = getDisplayPos({ x: x * TILE_W, y: y * TILE_H / 2 })
+        const pos = getDisplayPos({ x: x * TILE_W, y: y * TILE_H })
         tile.position.set(pos.x, pos.y)
         this.addChild(tile)
       }

@@ -1,17 +1,17 @@
-import { Application, ColorSource, Container, Graphics, Sprite } from "pixi.js";
+import { AnimatedSprite, Application, Assets, Container, DisplayObject, Sprite, Spritesheet } from "pixi.js";
 import { DEBUG } from "./config";
-import { LOCATION_CONFIG, LocationConfig, LocationObjectType } from "./configs/location_config";
+import { LOCATION_CONFIG, LocationConfig } from "./configs/location_config";
 import { GrenadeThrower } from "./creators/throw_controller";
 import { GAME_EVENTS } from "./events";
 import { GroundLayer } from "./ground_layer";
 import { Character } from "./model/character";
 import { GameLocation, LocationObject } from "./model/game_location";
-import { Nade, NadeType } from "./model/nade";
-import { Obstacle } from "./model/obstacle";
-import { NADE_COLORS, NadeUI } from "./nade_ui";
+import { NADE_ICON_KEYS, Nade, NadeType } from "./model/nade";
+import { OBSTACLE_GFX, Obstacle } from "./model/obstacle";
+import { NadeUI } from "./nade_ui";
 import { PALETTE } from "./palette";
 import { StatBar } from "./ui/statbar";
-import { EventBus, getDisplayPos, quadFallof } from "./utils";
+import { EventBus, getDisplayPos, isoFrom3D, quadFallof } from "./utils";
 
 export class Game {
   canvas: HTMLCanvasElement
@@ -52,8 +52,7 @@ export class Game {
 
     this.app.ticker.add(() => {
       this.activeNades.forEach((sprite, nade) => {
-        const isoPos = getDisplayPos(nade.pos)
-        sprite.position.set(isoPos.x, isoPos.y)
+        this.updateNadeSprite(sprite, nade)
       })
     })
 
@@ -92,11 +91,14 @@ export class Game {
     this.app.stage.addChild(nadeUI)
 
     const enemy = location.getEnemy()
+
     if (enemy) {
+      const enemySprite = this.addEnemy(enemy)
+
       const enemyHPBar = new StatBar(100, 100)
-      this.app.stage.addChild(enemyHPBar)
+      enemySprite.addChild(enemyHPBar)
       enemyHPBar.update(enemy.hp)
-      enemyHPBar.position.set(enemy.pos.x, enemy.pos.y)
+      enemyHPBar.position.set(-enemyHPBar.width / 2, enemyHPBar.height + 20)
 
       EventBus.on(GAME_EVENTS.CHARACTER_HIT, (character: Character, damage: number) => {
         enemyHPBar.update(character.hp)
@@ -104,6 +106,7 @@ export class Game {
 
       EventBus.on(GAME_EVENTS.CHARACTER_DIED, (character: Character) => {
         this._gameOver()
+        enemyHPBar.visible = false
       })
     }
 
@@ -112,6 +115,12 @@ export class Game {
       this._setupDebugFeatures()
     }
   }
+  updateNadeSprite(sprite: Sprite, nade: Nade) {
+    const isoPos = isoFrom3D(nade.pos)
+    // const isoPos = getDisplayPos(nade.pos)
+    sprite.position.set(isoPos.x, isoPos.y)
+    sprite.angle += 5
+  }
 
   private _gameOver() {
     alert("Game over")
@@ -119,12 +128,9 @@ export class Game {
 
   private _launchNade(thrower: LocationObject, nade: Nade) {
 
-    const nadeSprite = new Sprite()
-    const g = new Graphics()
-    g.beginFill(NADE_COLORS[nade.type])
-    g.drawCircle(-10, -10, 20)
-    g.endFill()
-    nadeSprite.addChild(g)
+    const nadeSprite = Sprite.from(NADE_ICON_KEYS[nade.type])
+    nadeSprite.anchor.set(0.5)
+    nadeSprite.scale.set(3)
 
     this.activeNades.set(nade, nadeSprite)
     this.app.stage.addChild(nadeSprite)
@@ -139,7 +145,7 @@ export class Game {
           location.addObject(new Character(objConf.position))
           break
         case "obstacle":
-          location.addObject(new Obstacle(objConf.position))
+          location.addObject(new Obstacle(objConf.position, objConf.obstacleType))
           break
       }
     }
@@ -147,26 +153,17 @@ export class Game {
   }
 
   private _displayLocation(location: GameLocation) {
-    const objectColors: Record<LocationObjectType, ColorSource> = {
-      character: PALETTE.YELLOW,
-      obstacle: PALETTE.ASPHALT
-    }
-
     const locationDisplay = new Container()
 
     this.app.stage.addChild(new GroundLayer(10, 5))
 
-    for (const obj of location.objects) {
-      const sprite = new Sprite()
-      const g = new Graphics()
-      const color = objectColors[obj.type]
-      g.beginFill(color)
-      g.drawRect(-50, -50, 100, 100)
-      g.endFill()
-      sprite.addChild(g)
+    this.addPlayableChar(location.getPlayableCharacter())
+
+    for (const obj of location.obstacles) {
+      const sprite = Sprite.from(OBSTACLE_GFX[obj.obstacleType])
       sprite.anchor.set(0.5)
 
-      const isoPos = getDisplayPos({ x: obj.pos.x, y: obj.pos.y / 2 })
+      const isoPos = getDisplayPos({ x: obj.pos.x, y: obj.pos.y })
       sprite.position.set(isoPos.x, isoPos.y)
 
 
@@ -174,6 +171,40 @@ export class Game {
     }
 
     this.app.stage.addChild(locationDisplay)
+  }
+
+  addEnemy(char: Character) {
+    const c = new Container()
+    const charSheet = Assets.get("chars") as Spritesheet
+    const sprite = new AnimatedSprite(charSheet.animations["blue"])
+    sprite.scale.set(-3, 3)
+    this.setupCharSprite(sprite, char)
+    this.setCharPosition(c, char)
+    c.addChild(sprite)
+    this.app.stage.addChild(c)
+    return c
+  }
+
+  setupCharSprite(sprite: AnimatedSprite, char: Character) {
+    sprite.anchor.set(0.5, 0.7)
+    sprite.play()
+    sprite.animationSpeed = 0.25
+  }
+
+  addPlayableChar(char: Character | undefined) {
+    if (!char) return
+
+    const charSheet = Assets.get("chars") as Spritesheet
+    const sprite = new AnimatedSprite(charSheet.animations["red"])
+    sprite.scale.set(3)
+    this.setupCharSprite(sprite, char)
+    this.setCharPosition(sprite, char)
+    this.app.stage.addChild(sprite)
+  }
+
+  setCharPosition(c: DisplayObject, char: Character) {
+    const isoPos = getDisplayPos({ x: char.pos.x, y: char.pos.y })
+    c.position.set(isoPos.x, isoPos.y)
   }
 
   // For pixi-inspector (https://github.com/bfanger/pixi-inspector) to work
