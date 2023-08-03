@@ -1,7 +1,7 @@
 import { ms, NADE_CONFIG, NadeConfig } from "../configs/nade_config"
 import { GAME_EVENTS } from "../events"
 import { EventBus } from "../utils"
-import { HasPosition, Position } from "./game_location"
+import { HasPosition, WorldPos } from "./game_location"
 
 export type NadeType = "frag" | "he" | "thermal"
 
@@ -13,8 +13,8 @@ export const NADE_ICON_KEYS: Record<NadeType, string> = {
 
 export class Nade implements HasPosition {
   type: NadeType
-  initialPos: Position
-  pos: Position
+  initialPos: WorldPos
+  pos: WorldPos
   throwDistance = 0
   config: NadeConfig
   flightElapsed: ms
@@ -25,7 +25,7 @@ export class Nade implements HasPosition {
     this.config = Object.assign(NADE_CONFIG[type])
   }
 
-  startFlying(pos: Position, throwDistance: number) {
+  startFlying(pos: WorldPos, throwDistance: number) {
     // ToDo: reuse points
     this.initialPos = { x: pos.x, y: pos.y }
     this.pos = { x: pos.x, y: pos.y }

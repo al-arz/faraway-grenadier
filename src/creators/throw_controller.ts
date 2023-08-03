@@ -1,11 +1,11 @@
 import { NADE_CONFIG, ms } from "../configs/nade_config";
 import { GAME_EVENTS } from "../events";
-import { HasPosition, Position } from "../model/game_location";
+import { WorldPos } from "../model/game_location";
 import { Nade, NadeType } from "../model/nade";
 import { EventBus } from "../utils";
 
 export class GrenadeThrower {
-  initialPosition: Position
+  initialPosition: WorldPos
   isThrowingAllowed = true
 
   aimTimer: {
@@ -14,8 +14,8 @@ export class GrenadeThrower {
     duration: ms
   }
 
-  constructor(thrower: HasPosition) {
-    this.initialPosition = thrower.pos
+  constructor(pos: WorldPos) {
+    this.initialPosition = pos
 
     // ToDo: need to check if press was cancelled without button up
     // Otherwise we're softlocked in isThrowingAllowed = false

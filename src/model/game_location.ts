@@ -1,10 +1,11 @@
 import { Character } from "./character"
 import { Obstacle } from "./obstacle"
 
-export type Position = { x: number, y: number }
+export type WorldPos = { x: number, y: number }
+export type ScreenPos = { x: number, y: number }
 
 export interface HasPosition {
-  pos: Position
+  pos: WorldPos
 }
 
 export type LocationObject = Character | Obstacle

@@ -4,12 +4,14 @@
   "description": "Grenade throwing game",
   "main": "index.js",
   "scripts": {
-    "dev": "npx esbuild src/main.ts --sourcemap --outdir=src --bundle --watch --servedir=src"
+    "dev": "npx esbuild src/main.ts --sourcemap --outdir=src --bundle --watch --servedir=src",
+    "pack": "node scripts/pack_textures"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "esbuild": "^0.17.19",
+    "free-tex-packer-core": "^0.3.4",
     "typescript": "^5.1.6"
   },
   "dependencies": {

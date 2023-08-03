@@ -1,13 +1,13 @@
 import { GAME_EVENTS } from "../events";
 import { EventBus } from "../utils";
-import { HasPosition, Position } from "./game_location";
+import { HasPosition, WorldPos } from "./game_location";
 
 export class Character implements HasPosition {
   type: "character"
-  pos: Position
+  pos: WorldPos
   hp: number
 
-  constructor(initialPosition: Position) {
+  constructor(initialPosition: WorldPos) {
     this.type = "character"
     this.pos = initialPosition
     this.hp = 100

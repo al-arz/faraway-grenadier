@@ -3,6 +3,7 @@ import { DEBUG } from "./config";
 import { LOCATION_CONFIG, LocationConfig, LocationObjectType } from "./configs/location_config";
 import { GrenadeThrower } from "./creators/throw_controller";
 import { GAME_EVENTS } from "./events";
+import { GroundLayer } from "./ground_layer";
 import { Character } from "./model/character";
 import { GameLocation, LocationObject } from "./model/game_location";
 import { Nade, NadeType } from "./model/nade";
@@ -10,7 +11,7 @@ import { Obstacle } from "./model/obstacle";
 import { NADE_COLORS, NadeUI } from "./nade_ui";
 import { PALETTE } from "./palette";
 import { StatBar } from "./ui/statbar";
-import { EventBus, quadFallof } from "./utils";
+import { EventBus, getDisplayPos, quadFallof } from "./utils";
 
 export class Game {
   canvas: HTMLCanvasElement
@@ -33,7 +34,7 @@ export class Game {
 
     const pc = location.getPlayableCharacter()
     if (pc) {
-      const thrower = new GrenadeThrower(pc)
+      const thrower = new GrenadeThrower(pc.pos)
 
       EventBus.on(GAME_EVENTS.NADE_LAUNCHED, (n: Nade) => {
         this._launchNade(pc, n)
@@ -51,7 +52,8 @@ export class Game {
 
     this.app.ticker.add(() => {
       this.activeNades.forEach((sprite, nade) => {
-        sprite.position.set(nade.pos.x, nade.pos.y)
+        const isoPos = getDisplayPos(nade.pos)
+        sprite.position.set(isoPos.x, isoPos.y)
       })
     })
 
@@ -120,7 +122,7 @@ export class Game {
     const nadeSprite = new Sprite()
     const g = new Graphics()
     g.beginFill(NADE_COLORS[nade.type])
-    g.drawCircle(0, 0, 20)
+    g.drawCircle(-10, -10, 20)
     g.endFill()
     nadeSprite.addChild(g)
 
@@ -152,15 +154,22 @@ export class Game {
 
     const locationDisplay = new Container()
 
+    this.app.stage.addChild(new GroundLayer(10, 5))
+
     for (const obj of location.objects) {
       const sprite = new Sprite()
       const g = new Graphics()
       const color = objectColors[obj.type]
       g.beginFill(color)
-      g.drawRect(0, 0, 100, 100)
+      g.drawRect(-50, -50, 100, 100)
       g.endFill()
       sprite.addChild(g)
-      sprite.position.set(obj.pos.x, obj.pos.y)
+      sprite.anchor.set(0.5)
+
+      const isoPos = getDisplayPos({ x: obj.pos.x, y: obj.pos.y / 2 })
+      sprite.position.set(isoPos.x, isoPos.y)
+
+
       locationDisplay.addChild(sprite)
     }
 
