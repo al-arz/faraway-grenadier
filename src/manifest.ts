@@ -20,5 +20,11 @@ export const manifest: ResolverManifest = {
         "chars": "./assets/chars/chars.json"
       }
     },
+    {
+      name: "fx",
+      assets: {
+        "fx": "./assets/fx/fx.json"
+      }
+    },
   ]
 }

@@ -60,6 +60,18 @@ export class Game {
       const s = this.activeNades.get(nade)
       if (s) {
         this.app.stage.removeChild(s)
+        const explosionSheet = Assets.get("fx") as Spritesheet
+        console.log(explosionSheet)
+        const explosion = new AnimatedSprite(explosionSheet.animations["boom"])
+        explosion.play()
+        explosion.onComplete = () => {
+          this.app.stage.removeChild(explosion)
+        }
+        explosion.loop = false
+        explosion.animationSpeed = 0.25
+        this.app.stage.addChild(explosion)
+        explosion.anchor.set(0.5, 0.7)
+        explosion.position.set(s.x, s.y)
         this.activeNades.delete(nade)
       }
       for (const target of location.characters) {

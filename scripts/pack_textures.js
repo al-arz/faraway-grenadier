@@ -19,6 +19,7 @@ const bundles = [
   "ground",
   "nades",
   // "chars",
+  "fx",
 ]
 
 const outputPath = "./src/assets/"
