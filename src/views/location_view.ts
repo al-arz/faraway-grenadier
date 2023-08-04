@@ -1,6 +1,6 @@
 import { AnimatedSprite, Assets, Container, Sprite, Spritesheet } from "pixi.js"
 import { OBSTACLE_GFX } from "../configs/location_config"
-import { NADE_ICONS } from "../configs/nade_config"
+import { ExplosionConfig, NADE_EXPLOSIONS, NADE_ICONS } from "../configs/nade_config"
 import { GAME_EVENTS } from "../events"
 import { GameLocation, WorldPos } from "../model/game_location"
 import { Nade } from "../model/nade"
@@ -62,15 +62,17 @@ export class LocationView extends Container {
     return nadeSprite
   }
 
-  explode(nadeSprite: Sprite, worldPos: WorldPos) {
-    this.showExplosion(worldPos)
+  explode(nadeSprite: Sprite, nade: Nade) {
+    const explosionConfig = NADE_EXPLOSIONS[nade.type]
+    this.showExplosion(explosionConfig, nade.position)
     this.sortable.removeChild(nadeSprite)
   }
 
-  showExplosion(worldPos: WorldPos) {
+  showExplosion(ec: ExplosionConfig, worldPos: WorldPos) {
     const explosionSheet = Assets.get("fx") as Spritesheet
     console.log(explosionSheet)
-    const explosion = new AnimatedSprite(explosionSheet.animations["boom"])
+    const explosion = new AnimatedSprite(explosionSheet.animations[ec.animationKey])
+    explosion.scale.set(2)
     explosion.play()
     explosion.onComplete = () => {
       this.sortable.removeChild(explosion)
@@ -78,7 +80,7 @@ export class LocationView extends Container {
     explosion.loop = false
     explosion.animationSpeed = 0.25
     this.addSortable(explosion, worldPos)
-    explosion.anchor.set(0.5, 0.85)
+    explosion.anchor.set(0.5, ec.anchorY)
     explosion.position.copyFrom(isoFrom3D(worldPos))
   }
 

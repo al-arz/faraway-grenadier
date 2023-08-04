@@ -4,9 +4,9 @@ import { LOCATION_CONFIG } from "./configs/location_config";
 import { GAME_EVENTS } from "./events";
 import { GameLocation, WorldPos } from "./model/game_location";
 import { Nade, NadeType } from "./model/nade";
-import { NadeUI } from "./nade_ui";
 import { GrenadeThrower } from "./systems/grenade_thrower";
 import { LocationBuilder } from "./systems/location_builder";
+import { NadesUI } from "./ui/nade_ui";
 import { EventBus } from "./utils";
 import { LocationView } from "./views/location_view";
 
@@ -33,7 +33,7 @@ export class Game {
       "he",
       "thermal",
     ]
-    const nadeUI = new NadeUI(nadeInventory)
+    const nadeUI = new NadesUI(nadeInventory)
 
     this.activeNades = new Map()
     this.locationView = new LocationView(this.location)
@@ -80,7 +80,7 @@ export class Game {
   onNadeExplosion(nade: Nade) {
     const nadeSprite = this.activeNades.get(nade)
     if (nadeSprite) {
-      this.locationView.explode(nadeSprite, nade.position)
+      this.locationView.explode(nadeSprite, nade)
     }
     this.activeNades.delete(nade)
     this.location.processExplosion(nade)

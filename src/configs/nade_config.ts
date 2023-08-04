@@ -16,6 +16,26 @@ export type NadeConfig = {
   flightDuration: ms,
 }
 
+export type ExplosionConfig = {
+  animationKey: string,
+  anchorY: number,
+}
+
+export const NADE_EXPLOSIONS: Record<NadeType, ExplosionConfig> = {
+  frag: {
+    animationKey: "expl_1",
+    anchorY: 0.85
+  },
+  he: {
+    animationKey: "expl_0",
+    anchorY: 0.5
+  },
+  thermal: {
+    animationKey: "expl_2",
+    anchorY: 0.85
+  },
+}
+
 export const NADE_CONFIG: Record<NadeType, NadeConfig> = {
   frag: {
     blastRadius: 200,
