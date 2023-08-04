@@ -1,5 +1,11 @@
 import { NadeType } from "../model/nade";
 
+export const NADE_ICONS = {
+  frag: "frag",
+  he: "he",
+  thermal: "molotov"
+} as const
+
 export type ms = number
 
 export type NadeConfig = {

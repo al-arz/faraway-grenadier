@@ -1,11 +1,13 @@
+import { quadFallof } from "../utils"
 import { Character } from "./character"
+import { Nade } from "./nade"
 import { Obstacle } from "./obstacle"
 
-export type WorldPos = { x: number, y: number }
+export type WorldPos = { x: number, y: number, z: number }
 export type ScreenPos = { x: number, y: number }
 
 export interface HasPosition {
-  pos: WorldPos
+  position: WorldPos
 }
 
 export type LocationObject = Character | Obstacle
@@ -18,23 +20,36 @@ export class GameLocation {
   constructor() {
   }
 
-  addObject(obj: LocationObject) {
+  addCharacter(obj: Character) {
     this.objects.push(obj)
-    switch (obj.type) {
-      case "character":
-        this.characters.push(obj)
-        break
-      case "obstacle":
-        this.obstacles.push(obj)
-        break
-    }
+    this.characters.push(obj)
+  }
+
+  addObstacle(obj: Obstacle) {
+    this.objects.push(obj)
+    this.obstacles.push(obj)
   }
 
   getPlayableCharacter(): Character | undefined {
-    return this.characters[0]
+    return this.characters.find(c => c.characterKind == "playable")
   }
 
-  getEnemy(): Character | undefined {
-    return this.characters[1]
+  getFirstEnemy(): Character | undefined {
+    return this.characters.find(c => c.characterKind == "enemy")
+  }
+
+  processExplosion(nade: Nade) {
+    for (const target of this.characters) {
+      const dx = target.position.x - nade.position.x
+      const dy = target.position.y - nade.position.y
+
+      const dSq = Math.sqrt(dx * dx + dy * dy)
+      const blastSq = nade.config.blastRadius
+      if (dSq <= blastSq) {
+        const falloff = quadFallof(2 * (dSq / blastSq), 2)
+        const dmg = nade.config.damage * falloff;
+        target.takeDamage(dmg)
+      }
+    }
   }
 }

@@ -1,22 +1,28 @@
+import { CharacterKind } from "../configs/location_config";
 import { GAME_EVENTS } from "../events";
 import { EventBus } from "../utils";
-import { HasPosition, WorldPos } from "./game_location";
+import { WorldPos } from "./game_location";
 
-export class Character implements HasPosition {
-  type: "character"
-  pos: WorldPos
+export interface CharacterConfig {
+  objectKind: "character"
+  position: WorldPos
+  characterKind: CharacterKind
+  hp?: number
+}
+
+export class Character implements CharacterConfig {
+  objectKind: "character"
+  characterKind: CharacterKind
+  position: WorldPos
   hp: number
 
-  constructor(initialPosition: WorldPos) {
-    this.type = "character"
-    this.pos = initialPosition
-    this.hp = 100
+  constructor(charConfig: CharacterConfig) {
+    Object.assign(this, charConfig)
   }
 
   takeDamage(damage: number) {
     this.hp -= damage
     EventBus.emit(GAME_EVENTS.CHARACTER_HIT, this, damage)
-    console.log(`character at ${this.pos.x}, ${this.pos.y} took ${damage} damage. HP left: ${this.hp}`)
     if (this.hp <= 0) {
       this.die()
     }

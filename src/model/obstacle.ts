@@ -1,20 +1,18 @@
-import { HasPosition, WorldPos } from "./game_location";
+import { ObstacleKind } from "../configs/location_config";
+import { WorldPos } from "./game_location";
 
-export const OBSTACLE_GFX = {
-  a: "barrier_A",
-  b: "barrier_B",
-} as const
+export interface ObstacleConfig {
+  objectKind: "obstacle"
+  position: WorldPos
+  obstacleKind: ObstacleKind
+}
 
-export type ObstacleType = keyof typeof OBSTACLE_GFX;
+export class Obstacle implements ObstacleConfig {
+  objectKind: "obstacle"
+  obstacleKind: ObstacleKind
+  position: WorldPos
 
-export class Obstacle implements HasPosition {
-  type: "obstacle"
-  obstacleType: "a" | "b"
-  pos: WorldPos
-
-  constructor(initialPosition: WorldPos, obstacleType: ObstacleType) {
-    this.type = "obstacle"
-    this.obstacleType = obstacleType
-    this.pos = initialPosition
+  constructor(config: ObstacleConfig) {
+    Object.assign(this, config)
   }
 }

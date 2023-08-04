@@ -1,6 +1,7 @@
 import { ColorSource, Container, Graphics, Sprite } from "pixi.js";
+import { NADE_ICONS } from "./configs/nade_config";
 import { GAME_EVENTS } from "./events";
-import { NADE_ICON_KEYS, NadeType } from "./model/nade";
+import { NadeType } from "./model/nade";
 import { PALETTE } from "./palette";
 import { EventBus } from "./utils";
 
@@ -33,7 +34,7 @@ export class NadeUI extends Container {
     g.drawRect(0, 0, BTN_W, 80)
     g.endFill()
 
-    const textureKey = NADE_ICON_KEYS[n]
+    const textureKey = NADE_ICONS[n]
     const icon = Sprite.from(textureKey)
     icon.anchor.set(0.5)
     icon.scale.set(3)

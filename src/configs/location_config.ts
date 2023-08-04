@@ -1,43 +1,44 @@
 import { TILE_H, TILE_W } from "../ground_layer"
-import { WorldPos } from "../model/game_location"
-import { ObstacleType } from "../model/obstacle"
+import { CharacterConfig } from "../model/character"
+import { ObstacleConfig } from "../model/obstacle"
 
 export type LocationObjectType = "character" | "obstacle"
 
-export type CharConfig = {
-  type: LocationObjectType
-  position: WorldPos
-}
+export const OBSTACLE_GFX = {
+  barrier_A: "barrier_A",
+  barrier_B: "barrier_B",
+} as const
 
-export type ObstacleConfig = {
-  type: LocationObjectType
-  position: WorldPos
-  obstacleType: ObstacleType
-}
+export type CharacterKind = "playable" | "enemy"
 
-export type LocationObjectConfig = CharConfig | ObstacleConfig
+export type ObstacleKind = keyof typeof OBSTACLE_GFX;
+
+export type LocationObjectConfig = CharacterConfig | ObstacleConfig
 
 export type LocationConfig = { objects: LocationObjectConfig[] }
 
 export const LOCATION_CONFIG: LocationConfig = {
   objects: [
     {
-      type: "character",
-      position: { x: TILE_W * 2, y: TILE_H * 2 }
+      objectKind: "character",
+      characterKind: "playable",
+      position: { x: TILE_W * 2, y: TILE_H * 2, z: 0 }
     },
     {
-      type: "obstacle",
-      obstacleType: "a",
-      position: { x: TILE_W * 3, y: TILE_H * 2 }
+      objectKind: "obstacle",
+      obstacleKind: "barrier_A",
+      position: { x: TILE_W * 3, y: TILE_H * 2, z: 0 }
     },
     {
-      type: "obstacle",
-      obstacleType: "b",
-      position: { x: TILE_W * 6, y: TILE_H * 2 }
+      objectKind: "obstacle",
+      obstacleKind: "barrier_B",
+      position: { x: TILE_W * 6, y: TILE_H * 2, z: 0 }
     },
     {
-      type: "character",
-      position: { x: TILE_W * 7, y: TILE_H * 2 }
+      objectKind: "character",
+      characterKind: "enemy",
+      hp: 100,
+      position: { x: TILE_W * 7, y: TILE_H * 2, z: 0 }
     },
   ]
 }

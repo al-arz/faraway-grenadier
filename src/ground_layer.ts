@@ -1,6 +1,6 @@
 import { Container, Sprite, Text } from "pixi.js";
 import { DEBUG } from "./config";
-import { getDisplayPos } from "./utils";
+import { isoFrom3D } from "./utils";
 
 export const TILE_W = 128
 export const TILE_H = 128
@@ -20,7 +20,7 @@ export class GroundLayer extends Container {
           tile.addChild(coordText)
         }
 
-        const pos = getDisplayPos({ x: x * TILE_W, y: y * TILE_H })
+        const pos = isoFrom3D({ x: x * TILE_W, y: y * TILE_H, z: 0 })
         tile.position.set(pos.x, pos.y)
         this.addChild(tile)
       }
