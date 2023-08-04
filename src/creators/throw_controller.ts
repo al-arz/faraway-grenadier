@@ -54,8 +54,8 @@ export class GrenadeThrower {
     const power = this.aimTimer.elapsed / this.aimTimer.duration
     console.log("Launching nade", power)
     const nade = new Nade(type)
-    EventBus.emit(GAME_EVENTS.NADE_LAUNCHED, nade)
     nade.startFlying(this.initialPosition, power)
+    EventBus.emit(GAME_EVENTS.NADE_LAUNCHED, nade)
   }
 
   update(dt: ms) {

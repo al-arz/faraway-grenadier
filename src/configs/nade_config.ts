@@ -15,21 +15,21 @@ export const NADE_CONFIG: Record<NadeType, NadeConfig> = {
     blastRadius: 200,
     damage: 80,
     maxRange: 80,
-    aimDuration: 1000,
+    aimDuration: 2000,
     flightDuration: 1500,
   },
   he: {
     blastRadius: 100,
     damage: 140,
     maxRange: 80,
-    aimDuration: 1000,
+    aimDuration: 2000,
     flightDuration: 1500,
   },
   thermal: {
     blastRadius: 150,
     damage: 110,
     maxRange: 50,
-    aimDuration: 1000,
+    aimDuration: 2000,
     flightDuration: 1500,
   }
 }

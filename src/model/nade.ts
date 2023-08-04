@@ -16,6 +16,7 @@ export const NADE_ICON_KEYS = {
 export class Nade implements HasPosition {
   type: NadeType
   initialPos: Pos3D
+  targetPos: Pos3D
   pos: Pos3D
   throwDistance = 0
   config: NadeConfig
@@ -34,18 +35,30 @@ export class Nade implements HasPosition {
     this.flightElapsed = 0
     this.isFlying = true
     this.throwDistance = throwDistance
+
+    const range = 16 * this.throwDistance
+    const height = 300
+
+    this.targetPos = {
+      x: this.initialPos.x * (range + 1),
+      y: this.pos.y,
+      z: this.initialPos.z - Math.sin(Math.PI) * height
+    }
+  }
+
+  lerp(a: number, b: number, t: number): number {
+    return a + (b - a) * t
   }
 
   update(dt: ms) {
     if (this.isFlying) {
       this.flightElapsed += dt
 
-      const range = 16 * this.throwDistance
-      const height = 300
+
 
       const t = Math.min(this.flightElapsed / this.config.flightDuration, 1)
-      this.pos.x = (this.initialPos.x * (1 + t * range))
-      this.pos.z = this.initialPos.z - Math.sin(t * Math.PI) * height
+      this.pos.x = (this.initialPos.x * (1 + t * 16 * this.throwDistance))
+      this.pos.z = this.initialPos.z - Math.sin(t * Math.PI) * 300
 
 
       if (this.flightElapsed >= this.config.flightDuration) {

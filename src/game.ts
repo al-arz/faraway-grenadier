@@ -11,6 +11,7 @@ import { OBSTACLE_GFX, Obstacle } from "./model/obstacle";
 import { NadeUI } from "./nade_ui";
 import { PALETTE } from "./palette";
 import { StatBar } from "./ui/statbar";
+import { Target } from "./ui/target";
 import { EventBus, getDisplayPos, isoFrom3D, quadFallof } from "./utils";
 
 export class Game {
@@ -70,7 +71,7 @@ export class Game {
         explosion.loop = false
         explosion.animationSpeed = 0.25
         this.app.stage.addChild(explosion)
-        explosion.anchor.set(0.5, 0.7)
+        explosion.anchor.set(0.5, 0.85)
         explosion.position.set(s.x, s.y)
         this.activeNades.delete(nade)
       }
@@ -110,7 +111,7 @@ export class Game {
       const enemyHPBar = new StatBar(100, 100)
       enemySprite.addChild(enemyHPBar)
       enemyHPBar.update(enemy.hp)
-      enemyHPBar.position.set(-enemyHPBar.width / 2, enemyHPBar.height + 20)
+      enemyHPBar.position.set(-enemyHPBar.width / 2, enemyHPBar.height + 20 - enemySprite.height)
 
       EventBus.on(GAME_EVENTS.CHARACTER_HIT, (character: Character, damage: number) => {
         enemyHPBar.update(character.hp)
@@ -143,6 +144,13 @@ export class Game {
     const nadeSprite = Sprite.from(NADE_ICON_KEYS[nade.type])
     nadeSprite.anchor.set(0.5)
     nadeSprite.scale.set(3)
+
+    const target = new Target()
+    const targetIso = isoFrom3D(nade.targetPos)
+    target.position.set(targetIso.x, targetIso.y)
+    this.app.stage.addChildAt(target, 2)
+
+    EventBus.once(GAME_EVENTS.NADE_EXPLODED, () => this.app.stage.removeChild(target))
 
     this.activeNades.set(nade, nadeSprite)
     this.app.stage.addChild(nadeSprite)
