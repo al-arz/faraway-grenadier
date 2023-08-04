@@ -70,7 +70,6 @@ export class LocationView extends Container {
 
   showExplosion(ec: ExplosionConfig, worldPos: WorldPos) {
     const explosionSheet = Assets.get("fx") as Spritesheet
-    console.log(explosionSheet)
     const explosion = new AnimatedSprite(explosionSheet.animations[ec.animationKey])
     explosion.scale.set(2)
     explosion.play()

@@ -1,8 +1,11 @@
-import { NADE_CONFIG, ms } from "../configs/nade_config";
 import { GAME_EVENTS } from "../events";
 import { WorldPos } from "../model/game_location";
 import { Nade, NadeType } from "../model/nade";
 import { EventBus } from "../utils";
+
+export type ms = number
+
+const MAX_AIM_DURATION: ms = 1500
 
 export class GrenadeThrower {
   initialPosition: WorldPos
@@ -37,43 +40,26 @@ export class GrenadeThrower {
     })
   }
 
-  // How do we get info about node explosion which should toggle flag
-  // to allow throwing again?
   startAiming(n: NadeType) {
     this.aimTimer = {
       active: true,
-      duration: NADE_CONFIG[n].aimDuration,
+      duration: MAX_AIM_DURATION,
       elapsed: 0
     }
-    console.log("Starting new throw")
-
   }
 
   launch(type: NadeType) {
     this.aimTimer.active = false
-    const power = this.aimTimer.elapsed / this.aimTimer.duration
-    console.log("Launching nade", power)
     const nade = new Nade(type)
-    nade.startFlying(this.initialPosition, power)
+    const powerFraction = Math.min(1, this.aimTimer.elapsed / this.aimTimer.duration)
+    const throwPower = powerFraction * nade.config.maxThrowPower
+    nade.startFlying(this.initialPosition, throwPower, Math.PI / 3)
     EventBus.emit(GAME_EVENTS.NADE_LAUNCHED, nade)
   }
 
   update(dt: ms) {
     if (this.aimTimer && this.aimTimer.active) {
       this.aimTimer.elapsed = Math.min(this.aimTimer.duration, this.aimTimer.elapsed + dt)
-      /*
-      this.aimTimer.elapsed += dt
-      if (this.aimTimer.elapsed >= this.aimTimer.duration) {
-        this.aimTimer.active = false
-        this.aimTimer.elapsed = this.aimTimer.duration
-      }
-      */
     }
-
-    // ToDo: should update automatically by corresponding system
-    // Definitely not a thrower concern
-    // if (this.nade) {
-    //   this.nade.update(dt)
-    // }
   }
 }

@@ -1,4 +1,3 @@
-import { quadFallof } from "../utils"
 import { Character } from "./character"
 import { Nade } from "./nade"
 import { Obstacle } from "./obstacle"
@@ -43,13 +42,11 @@ export class GameLocation {
       const dx = target.position.x - nade.position.x
       const dy = target.position.y - nade.position.y
 
-      const dSq = Math.sqrt(dx * dx + dy * dy)
-      const blastSq = nade.config.blastRadius
-      if (dSq <= blastSq) {
-        const falloff = quadFallof(2 * (dSq / blastSq), 2)
-        const dmg = nade.config.damage * falloff;
-        target.takeDamage(dmg)
-      }
+      const d = Math.sqrt(dx * dx + dy * dy)
+
+      const bp = nade.config.blastPower
+      const dmg = Math.max(0, bp - d)
+      target.takeDamage(dmg)
     }
   }
 }
