@@ -1,6 +1,6 @@
-import { TILE_H, TILE_W } from "../ground_layer"
 import { CharacterConfig } from "../model/character"
 import { ObstacleConfig } from "../model/obstacle"
+import { TILE_H, TILE_W } from "../views/ground_layer"
 
 export type LocationObjectType = "character" | "obstacle"
 

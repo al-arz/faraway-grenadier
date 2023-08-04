@@ -1,6 +1,6 @@
 import { Container, Sprite, Text } from "pixi.js";
-import { DEBUG } from "./config";
-import { isoFrom3D } from "./utils";
+import { DEBUG } from "../config";
+import { isoFrom3D } from "../utils";
 
 export const TILE_W = 128
 export const TILE_H = 128
