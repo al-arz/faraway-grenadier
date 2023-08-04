@@ -37,7 +37,7 @@ export const FLIGHT_DURATION_PER_POWER = 10
 export const NADE_CONFIG: Record<NadeType, NadeConfig> = {
   frag: {
     maxThrowPower: 100,
-    blastPower: 40,
+    blastPower: 60,
   },
   he: {
     maxThrowPower: 95,
@@ -45,6 +45,6 @@ export const NADE_CONFIG: Record<NadeType, NadeConfig> = {
   },
   thermal: {
     maxThrowPower: 90,
-    blastPower: 60,
+    blastPower: 70,
   }
 }
