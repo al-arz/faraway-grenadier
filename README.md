@@ -16,7 +16,7 @@ Windows only since build script depends on [this thing](scripts/copy_assets.bat)
 
 ## Assets used
 
-Grenades: https://sn4k3.itch.io/grenade-bundle
-Location: https://kenney.nl/assets/retro-urban-kit
-Explosions: https://ansimuz.itch.io/explosion-animations-pack
-Characters: https://secrethideout.itch.io/team-wars-platformer-battle
+- Grenades: https://sn4k3.itch.io/grenade-bundle
+- Location: https://kenney.nl/assets/retro-urban-kit
+- Explosions: https://ansimuz.itch.io/explosion-animations-pack
+- Characters: https://secrethideout.itch.io/team-wars-platformer-battle
