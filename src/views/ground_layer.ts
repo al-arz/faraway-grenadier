@@ -5,12 +5,21 @@ import { isoFrom3D } from "../utils";
 export const TILE_W = 128
 export const TILE_H = 128
 
+const GROUND_TILES_W = 10
+const GROUND_TILES_H = 5
+
 export class GroundLayer extends Container {
-  constructor(w: number, h: number) {
+  tilesW: number
+  tilesH: number
+
+  constructor() {
     super()
 
-    for (let y = 0; y < h; y++) {
-      for (let x = 0; x < w; x++) {
+    this.tilesW = GROUND_TILES_W
+    this.tilesH = GROUND_TILES_H
+
+    for (let y = 0; y < this.tilesH; y++) {
+      for (let x = 0; x < this.tilesW; x++) {
         const tile = Sprite.from(`pavement`)
         tile.anchor.set(0.5)
 

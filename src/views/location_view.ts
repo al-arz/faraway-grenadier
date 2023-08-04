@@ -7,7 +7,7 @@ import { Nade } from "../model/nade"
 import { Target } from "../ui/target"
 import { EventBus, isoFrom3D, zIndexFromWorldPos } from "../utils"
 import { CharacterSprite } from "./character_sprite"
-import { GroundLayer } from "./ground_layer"
+import { GroundLayer, TILE_H, TILE_W } from "./ground_layer"
 
 export class LocationView extends Container {
   location: GameLocation
@@ -17,7 +17,7 @@ export class LocationView extends Container {
     super()
     this.location = location
 
-    const ground = this.addChild(new GroundLayer(10, 5))
+    const ground = this.addChild(new GroundLayer())
     this.sortable = this.addChild(new Container())
     this.sortable.sortableChildren = true
 
@@ -43,6 +43,8 @@ export class LocationView extends Container {
 
       this.addSortable(sprite, obj.position)
     }
+
+    this.pivot.set(-TILE_W, -TILE_H * ground.tilesH)
   }
 
   createNadeSprite(nade: Nade): Sprite {

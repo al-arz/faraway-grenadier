@@ -37,8 +37,10 @@ export class Game {
 
     this.activeNades = new Map()
     this.locationView = new LocationView(this.location)
-    this.locationView.position.set(0, 600)
-
+    this.locationView.position.set(
+      (app.screen.width - this.locationView.width) / 2,
+      (app.screen.height - this.locationView.height) / 2
+    )
 
     this.app.ticker.add(() => {
       this.activeNades.forEach((sprite, nade) => {
