@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npx esbuild src/main.ts --sourcemap --outdir=src --bundle --watch --servedir=src",
     "pack": "node scripts/pack_textures",
-    "build": "npx esbuild src/main.ts --outdir=dist --bundle --minify && scripts/copy_assets.bat"
+    "build": "npx esbuild src/main.ts --outdir=dist --bundle --minify && cd scripts/ && copy_assets.bat"
   },
   "author": "",
   "license": "ISC",
